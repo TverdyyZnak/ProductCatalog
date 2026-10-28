@@ -4,10 +4,6 @@ using Domain.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace Domain.Models
 {
     public class User: IEntity
@@ -15,6 +11,7 @@ namespace Domain.Models
         public Guid Id { get; }
         public string Login {  get; }
         public string Password { get; }
+        public bool IsBlocked { get; } = false;
         public Role UserRole { get; }
 
         private User(Guid id, string login, string password, Role role)
