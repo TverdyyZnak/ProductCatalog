@@ -1,5 +1,4 @@
-﻿
-namespace Domain.Primitives
+﻿namespace Domain.Primitives
 {
     public class Result<T>
     {
