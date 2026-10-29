@@ -1,9 +1,7 @@
-﻿using Domain.Enums;
-using Domain.Interfaces;
-using Domain.Primitives;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
+﻿using Domain.Primitives;
+using Domain.Primitives.Enums;
+using Domain.Primitives.Interfaces;
+
 namespace Domain.Models
 {
     public class User: IEntity
