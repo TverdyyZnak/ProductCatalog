@@ -1,4 +1,4 @@
-﻿namespace Domain.Enums
+﻿namespace Domain.Primitives.Enums
 {
     public enum Role
     {

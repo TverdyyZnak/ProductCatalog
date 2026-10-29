@@ -1,4 +1,4 @@
-﻿namespace Domain.Interfaces
+﻿namespace Domain.Primitives.Interfaces
 {
     public interface IEntity
     {

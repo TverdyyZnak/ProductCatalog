@@ -1,9 +1,9 @@
-﻿using Domain.Interfaces;
-using Domain.Primitives;
+﻿using Domain.Primitives;
+using Domain.Primitives.Interfaces;
 
 namespace Domain.Models
 {
-    public class UserAction: IEntity
+    public class UserAction : IEntity
     {
         public Guid Id { get; }
         public string Text { get; } = string.Empty;
