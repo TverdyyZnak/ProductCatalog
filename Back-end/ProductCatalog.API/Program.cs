@@ -1,13 +1,18 @@
-var builder = WebApplication.CreateBuilder(args);
+using Infrastructure.DB;
+using Microsoft.EntityFrameworkCore;
 
-// Add services to the container.
+var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddDbContext<AppDBContext>(options =>
+{
+    options.UseMySql(builder.Configuration.GetConnectionString(nameof(AppDBContext)), new MySqlServerVersion(new Version(9,0,0)));
+});
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
