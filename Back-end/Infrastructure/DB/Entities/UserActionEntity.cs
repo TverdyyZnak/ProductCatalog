@@ -7,7 +7,8 @@ namespace Infrastructure.DB.Entities
         public Guid Id { get; set; }
         public string Text { get; set; } = string.Empty;
         public DateTime ActionDate { get; set; }
-        public User? UserActor { get; set; }
+        public Guid UserId { get; set; }
+        public UserEntity? UserActor { get; set; }
 
     }
 }

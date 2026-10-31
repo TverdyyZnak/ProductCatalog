@@ -11,9 +11,10 @@ namespace Domain.Models
         public decimal Price { get; }
         public string MainNote { get; } = string.Empty;
         public string SubNote { get; } = string.Empty;
-        public Category Category { get; }
+        public Guid CategoryId { get; }
+        public Category? Category { get; } = null;
 
-        private Product(Guid id, string name, string desc, decimal price, string mNote, string sNote, Category category)
+        private Product(Guid id, string name, string desc, decimal price, string mNote, string sNote, Guid categoryId, Category? category)
         {
             Id = id;
             Name = name;
@@ -21,10 +22,11 @@ namespace Domain.Models
             Price = price;
             MainNote = mNote;
             SubNote = sNote;
+            CategoryId = categoryId;
             Category = category;
         }
 
-        public static Result<Product> Create(Guid id, string name, string desc, decimal price, string mNote, string sNote, Category category)
+        public static Result<Product> Create(Guid id, string name, string desc, decimal price, string mNote, string sNote, Guid categoryId, Category? category)
         {
             var errors = new List<string>();
 
@@ -38,7 +40,7 @@ namespace Domain.Models
                 return Result<Product>.Fail(errors);
             }
 
-            return Result<Product>.Success(new Product(id, name, desc, price, mNote, sNote, category));
+            return Result<Product>.Success(new Product(id, name, desc, price, mNote, sNote, categoryId, category));
         }
     }
 }

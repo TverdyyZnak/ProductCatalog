@@ -12,7 +12,11 @@ namespace Infrastructure.DB.Options
             builder.ToTable("Products");
 
             builder.HasKey(p => p.Id);
-            builder.HasOne(p => p.Category).WithMany().OnDelete(DeleteBehavior.Cascade);
+            builder
+                .HasOne(p => p.Category)
+                .WithMany()
+                .HasForeignKey(p => p.CategoryId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

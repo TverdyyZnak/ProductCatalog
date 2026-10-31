@@ -9,5 +9,6 @@ namespace Domain.Repositories
         Task<Guid> UpdateAsync(Category category);
         Task<Guid> DeleteAsync(Guid id);
         Task<Guid> CreateAsync(Category category);
+        
     }
 }

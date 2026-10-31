@@ -8,7 +8,8 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<AppDBContext>(options =>
 {
-    options.UseMySql(builder.Configuration.GetConnectionString(nameof(AppDBContext)), new MySqlServerVersion(new Version(9,0,0)));
+    var connectionString = builder.Configuration.GetConnectionString(nameof(AppDBContext));
+    options.UseMySql(connectionString, new MySqlServerVersion(new Version(8, 0, 33)));
 });
 
 var app = builder.Build();
