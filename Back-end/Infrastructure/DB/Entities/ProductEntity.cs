@@ -8,6 +8,7 @@
         public decimal Price { get; set; }
         public string MainNote { get; set; } = string.Empty;
         public string SubNote { get; set; } = string.Empty;
+        public Guid CategoryId { get; set; }
         public CategoryEntity? Category { get; set; }
     }
 }

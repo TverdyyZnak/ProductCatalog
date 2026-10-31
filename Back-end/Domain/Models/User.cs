@@ -12,15 +12,16 @@ namespace Domain.Models
         public bool IsBlocked { get; } = false;
         public Role UserRole { get; }
 
-        private User(Guid id, string login, string password, Role role)
+        private User(Guid id, string login, string password, bool isBlocked, Role role)
         {
             Id = id;
             Login = login;
             Password = password;
+            IsBlocked = isBlocked;
             UserRole = role;
         }
 
-        public static Result<User> Create(Guid id, string login, string password, Role role)
+        public static Result<User> Create(Guid id, string login, string password, bool isBlocked, Role role)
         {
             var errors = new List<string>();
 
@@ -39,7 +40,7 @@ namespace Domain.Models
                 return Result<User>.Fail(errors);
             }
 
-            return Result<User>.Success(new User(id, login, password, role));
+            return Result<User>.Success(new User(id, login, password, isBlocked, role));
         }
     }
 }

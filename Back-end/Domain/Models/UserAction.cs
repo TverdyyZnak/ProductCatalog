@@ -8,24 +8,19 @@ namespace Domain.Models
         public Guid Id { get; }
         public string Text { get; } = string.Empty;
         public DateTime ActionDate { get; }
-        public User? UserActor { get; }
+        public Guid UserActorId { get; }
 
-        private UserAction(Guid id, string text, DateTime actionDate, User? user)
+        private UserAction(Guid id, string text, DateTime actionDate, Guid userId)
         {
             Id = id;
             Text = text;
             ActionDate = actionDate;
-            UserActor = user;
+            UserActorId = userId;
         }
 
-        public static Result<UserAction> Create(Guid id, string text, DateTime actionDate, User user)
+        public static Result<UserAction> Create(Guid id, string text, DateTime actionDate, Guid userId)
         {
             var errors = new List<string>();
-
-            if (user == null)
-            {
-                errors.Add("Пользователь не указан");
-            }
 
             if (string.IsNullOrWhiteSpace(text))
             {
@@ -37,7 +32,7 @@ namespace Domain.Models
                 return Result<UserAction>.Fail(errors);
             }
 
-            return Result<UserAction>.Success(new UserAction(id, text, actionDate, user));
+            return Result<UserAction>.Success(new UserAction(id, text, actionDate, userId));
         }
 
 

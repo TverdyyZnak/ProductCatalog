@@ -4,7 +4,7 @@
     {
         public T? Value { get; }
         public IReadOnlyCollection<string> Error { get; }
-        public bool IsSuccess => Error.Any();
+        public bool IsSuccess => !Error.Any();
         
         public Result(T? value, List<string> errors)
         {
