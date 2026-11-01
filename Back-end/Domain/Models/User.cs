@@ -23,16 +23,16 @@ namespace Domain.Models
 
         public static Result<User> Create(Guid id, string login, string password, bool isBlocked, Role role)
         {
-            var errors = new List<string>();
+            var errors = new List<ErrorObject>();
 
             if (string.IsNullOrWhiteSpace(login)) 
             {
-                errors.Add("Логин не может быть пустым");
+                errors.Add(new ErrorObject(ErrorType.Failure, "Логин не может быть пустым"));
             }
 
             if (string.IsNullOrWhiteSpace(password))
             {
-                errors.Add("Пароль не может быть пустым");
+                errors.Add(new ErrorObject(ErrorType.Failure, "Пароль не может быть пустым"));
             }
 
             if (errors.Any())

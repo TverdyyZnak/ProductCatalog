@@ -1,14 +1,15 @@
 ﻿using Domain.Models;
+using Domain.Primitives;
 
 namespace Domain.Repositories
 {
     public interface IProductRepository
     {
         Task<List<Product>> GetAllAsync();
-        Task<Product> GetByIdAsync(Guid id);
+        Task<Result<Product>> GetByIdAsync(Guid id);
         Task<List<Product>> GetByCategoryAsync(Guid categoryId);
-        Task<Guid> CreateAsync(Product product);
-        Task<Guid> UpdateAsync(Product product);
-        Task<Guid> DeleteAsync(Guid id);
+        Task<Result<Guid>> CreateAsync(Product product);
+        Task<Result<Guid>> UpdateAsync(Product product);
+        Task<Result<Guid>> DeleteAsync(Guid id);
     }
 }

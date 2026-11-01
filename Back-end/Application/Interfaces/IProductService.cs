@@ -6,13 +6,13 @@ namespace Application.Interfaces
 {
     public interface IProductService
     {
-        Task<Result<List<ProductDto>>> GetAllProductsAsync();
-        Task<Result<List<ProductDto>>> GetProductsByCategoryAsync(CategoryDto category);
-        Task<Result<ProductDto>> GetProductByIdAsync(Guid id);
-        Task<Result<List<ProductDto>>> GetProductsByNameAsync(string name);
-        Task<Result<List<ProductDto>>> GetProductsByPriceAsync(decimal minPrice, decimal maxPrice);
-        Task<Result<Guid>> CreateProductAsync(CreateProductDto product);
-        Task<Result<Guid>> UpdateProductAsync(UpdateProductDto product);
-        Task<Result<Guid>> DeleteProductAsync(Guid id);
+        Task<List<ProductDto>> GetAllProductsAsync();
+        Task<List<ProductDto>> GetProductsByCategoryAsync(CategoryDto category);
+        Task<ProductDto> GetProductByIdAsync(Guid id);
+        Task<List<ProductDto>> GetProductsByNameAsync(string name);
+        Task<List<ProductDto>> GetProductsByPriceAsync(decimal minPrice, decimal maxPrice);
+        Task<Guid> CreateProductAsync(CreateProductDto product);
+        Task<Guid> UpdateProductAsync(UpdateProductDto product);
+        Task<Guid> DeleteProductAsync(Guid id);
     }
 }

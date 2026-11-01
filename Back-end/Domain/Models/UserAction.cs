@@ -1,5 +1,6 @@
 ﻿using Domain.Primitives;
 using Domain.Primitives.Interfaces;
+using Domain.Primitives.Enums;
 
 namespace Domain.Models
 {
@@ -20,11 +21,11 @@ namespace Domain.Models
 
         public static Result<UserAction> Create(Guid id, string text, DateTime actionDate, Guid userId)
         {
-            var errors = new List<string>();
+            var errors = new List<ErrorObject>();
 
             if (string.IsNullOrWhiteSpace(text))
             {
-                errors.Add("Текст действия не указан");
+                errors.Add(new ErrorObject(ErrorType.Failure, "Текст действия не указан"));
             }
 
             if (errors.Any()) 

@@ -1,5 +1,6 @@
-﻿using Domain.Exceptions;
-using Domain.Models;
+﻿using Domain.Models;
+using Domain.Primitives;
+using Domain.Primitives.Enums;
 using Domain.Repositories;
 using Infrastructure.DB.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -14,7 +15,7 @@ namespace Infrastructure.DB.Repository
             _context = context;
         }
 
-        public async Task<Guid> CreateAsync(Product product)
+        public async Task<Result<Guid>> CreateAsync(Product product)
         {
             var entity = new ProductEntity
             {
@@ -30,19 +31,19 @@ namespace Infrastructure.DB.Repository
             await _context.Products.AddAsync(entity);
             await _context.SaveChangesAsync();
 
-            return entity.Id;
+            return Result<Guid>.Success(entity.Id);
         }
 
-        public async Task<Guid> DeleteAsync(Guid id)
+        public async Task<Result<Guid>> DeleteAsync(Guid id)
         {
             int count = await _context.Products.Where(p => p.Id == id).ExecuteDeleteAsync();
 
             if(count == 0)
             {
-                throw new NotFoundException($"Продукта с id: {id} не существует");
+                return Result<Guid>.Fail(new ErrorObject(ErrorType.NotFound, $"Продукта с id: {id} не существует"));
             }
 
-            return id;
+            return Result<Guid>.Success(id);
         }
 
         public async Task<List<Product>> GetAllAsync()
@@ -65,13 +66,13 @@ namespace Infrastructure.DB.Repository
             return products;
         }
 
-        public async Task<Product> GetByIdAsync(Guid id)
+        public async Task<Result<Product>> GetByIdAsync(Guid id)
         {
             var entity = await _context.Products.AsNoTracking().FirstOrDefaultAsync(p => p.Id == id);
 
             if(entity == null)
             {
-                 throw new NotFoundException($"Продукт с id: {id} не найден");
+                return Result<Product>.Fail(new ErrorObject(ErrorType.NotFound, $"Продукт с id: {id} не найден"));
             }
 
             var product = Product.Create(
@@ -87,19 +88,19 @@ namespace Infrastructure.DB.Repository
 
             if (!product.IsSuccess) 
             {
-                throw new InternalServerErrorException($"Произошла внутренняя ошибка сервера");
+                return Result<Product>.Fail(new ErrorObject(ErrorType.Failure, $"Произошла внутренняя ошибка сервера"));
             }
 
-            return product.Value!;
+            return Result<Product>.Success(product.Value!);
         }
 
-        public async Task<Guid> UpdateAsync(Product product)
+        public async Task<Result<Guid>> UpdateAsync(Product product)
         {
             var entity = await _context.Products.FirstOrDefaultAsync(p => p.Id == product.Id);
 
             if (entity == null) 
             {
-                throw new NotFoundException($"Продукт с id: {product.Id} не найден");
+                return Result<Guid>.Fail(new ErrorObject(ErrorType.NotFound, $"Продукт с id: {product.Id} не найден"));
             }
 
             entity.Name = product.Name;
@@ -111,7 +112,7 @@ namespace Infrastructure.DB.Repository
 
             await _context.SaveChangesAsync();
 
-            return entity.Id;
+            return Result<Guid>.Success(entity.Id);
         }
 
         private List<Product> ConvertToProductList(List<ProductEntity> entities) 

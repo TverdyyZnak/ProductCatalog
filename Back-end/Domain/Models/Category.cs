@@ -1,4 +1,5 @@
 ﻿using Domain.Primitives;
+using Domain.Primitives.Enums;
 using Domain.Primitives.Interfaces;
 
 namespace Domain.Models
@@ -16,11 +17,11 @@ namespace Domain.Models
 
         public static Result<Category> Create(Guid id, string name) 
         {
-            var errors = new List<string>();
+            var errors = new List<ErrorObject>();
 
             if (string.IsNullOrWhiteSpace(name))
             {
-                errors.Add("Название категории не указано");
+                errors.Add(new ErrorObject(ErrorType.Validation, "Название категории не указано"));
             }
 
             if (errors.Any())
