@@ -1,5 +1,5 @@
-﻿using Domain.Exceptions;
-using Domain.Models;
+﻿using Domain.Models;
+using Domain.Primitives;
 using Domain.Repositories;
 using Infrastructure.DB.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -15,7 +15,7 @@ namespace Infrastructure.DB.Repository
             _context = context;
         }
 
-        public async Task<Guid> CreateAsync(UserAction userAction)
+        public async Task<Result<Guid>> CreateAsync(UserAction userAction)
         {
             var entity = new UserActionEntity
             {
@@ -28,7 +28,7 @@ namespace Infrastructure.DB.Repository
             await _context.UserActions.AddAsync(entity);
             await _context.SaveChangesAsync();
 
-            return entity.Id;
+            return Result<Guid>.Success(entity.Id);
         }
 
         public async Task<List<UserAction>> GetAllAsync()
@@ -38,11 +38,11 @@ namespace Infrastructure.DB.Repository
             return result;
         }
 
-        public async Task<List<UserAction>> GetByUserIdAsync(Guid id)
+        public async Task<Result<List<UserAction>>> GetByUserIdAsync(Guid id)
         {
             var entity = await _context.UserActions.AsNoTracking().Where(u => u.Id == id).ToListAsync();
             List<UserAction> result = entity.Select(u => UserAction.Create(u.Id, u.Text, u.ActionDate, u.UserId).Value).ToList()!;
-            return result;
+            return Result<List<UserAction>>.Success(result);
         }
     }
 }

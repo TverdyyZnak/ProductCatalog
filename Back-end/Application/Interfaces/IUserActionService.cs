@@ -5,6 +5,6 @@ namespace Application.Interfaces
 {
     public interface IUserActionService
     {
-        Task<Result<List<UserActionDto>>> GetAllUserActions();
+        Task<List<UserActionDto>> UserActions();
     }
 }

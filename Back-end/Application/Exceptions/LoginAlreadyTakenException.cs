@@ -2,7 +2,7 @@
 
 namespace Domain.Exceptions
 {
-    public class LoginAlreadyTakenException : DomainException
+    public class LoginAlreadyTakenException : BaseException
     {
         public override HttpStatusCode StatusCode => HttpStatusCode.Conflict;
 

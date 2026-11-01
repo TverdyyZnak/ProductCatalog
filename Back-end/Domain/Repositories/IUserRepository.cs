@@ -1,4 +1,5 @@
 ﻿using Domain.Models;
+using Domain.Primitives;
 using Domain.Primitives.Enums;
 
 namespace Domain.Repositories
@@ -6,11 +7,11 @@ namespace Domain.Repositories
     public interface IUserRepository
     {
         Task<List<User>> GetAllAsync();
-        Task<User> GetByIdAsync(Guid id);
-        Task<User> GetByLoginAsync(string login);
+        Task<Result<User>> GetByIdAsync(Guid id);
+        Task<Result<User>> GetByLoginAsync(string login);
         Task<List<User>> GetByRoleAsync(Role role);
-        Task<Guid> DeleteByIdAsync(Guid id);
-        Task<Guid> CreateAsync(User user);
-        Task<Guid> UpdateAsync(User user);
+        Task<Result<Guid>> DeleteByIdAsync(Guid id);
+        Task<Result<Guid>> CreateAsync(User user);
+        Task<Result<Guid>> UpdateAsync(User user);
     }
 }

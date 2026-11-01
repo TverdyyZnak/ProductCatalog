@@ -3,8 +3,8 @@
 namespace Application.DTO.UserActionDtos
 {
     public record UserActionDto(
-        string text,
-        DateTime actionDate,
+        string Text,
+        DateTime ActionDate,
         UserDto UserActor
     );
     

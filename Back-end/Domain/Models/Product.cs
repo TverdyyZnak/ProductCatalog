@@ -1,4 +1,5 @@
 ﻿using Domain.Primitives;
+using Domain.Primitives.Enums;
 using Domain.Primitives.Interfaces;
 
 namespace Domain.Models
@@ -28,11 +29,11 @@ namespace Domain.Models
 
         public static Result<Product> Create(Guid id, string name, string desc, decimal price, string mNote, string sNote, Guid categoryId, Category? category)
         {
-            var errors = new List<string>();
+            var errors = new List<ErrorObject>();
 
             if(price < 0)
             {
-                errors.Add("Цена не может быть меньше нуля");
+                errors.Add(new ErrorObject(ErrorType.Failure, "Стоимость товара не может быть меньше нуля"));
             }
 
             if (errors.Any())

@@ -2,7 +2,7 @@
 
 namespace Domain.Exceptions
 {
-    public class NotFoundException : DomainException
+    public class NotFoundException : BaseException
     {
         public override HttpStatusCode StatusCode => HttpStatusCode.NotFound;
 

@@ -1,5 +1,5 @@
-﻿using Domain.Exceptions;
-using Domain.Models;
+﻿using Domain.Models;
+using Domain.Primitives;
 using Domain.Primitives.Enums;
 using Domain.Repositories;
 using Infrastructure.DB.Entities;
@@ -16,13 +16,13 @@ namespace Infrastructure.DB.Repository
             _context = context;
         }
 
-        public async Task<Guid> CreateAsync(User user)
+        public async Task<Result<Guid>> CreateAsync(User user)
         {
             var userEntity = await _context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Login == user.Login);
 
             if (userEntity != null) 
             {
-                throw new LoginAlreadyTakenException($"Пользователь с данным логином уже существует");
+                return Result<Guid>.Fail(new ErrorObject(ErrorType.Conflict, $"Пользователь с данным логином уже существует"));
             }
 
             var entity = new UserEntity
@@ -37,19 +37,19 @@ namespace Infrastructure.DB.Repository
             await _context.Users.AddAsync(entity);
             await _context.SaveChangesAsync();
 
-            return entity.Id;
+            return Result<Guid>.Success(entity.Id);
         }
 
-        public async Task<Guid> DeleteByIdAsync(Guid id)
+        public async Task<Result<Guid>> DeleteByIdAsync(Guid id)
         {
             int count = await _context.Users.Where(u => u.Id == id).ExecuteDeleteAsync();
             
             if(count == 0)
             {
-                throw new NotFoundException($"Пользователь с id: {id} не найден");
+                return Result<Guid>.Fail(new ErrorObject(ErrorType.NotFound, $"Пользователь с id: {id} не найден"));
             }
 
-            return id;
+            return Result<Guid>.Success(id);
         }
 
         public async Task<List<User>> GetAllAsync()
@@ -64,42 +64,43 @@ namespace Infrastructure.DB.Repository
             return result;
         }
 
-        public async Task<User> GetByIdAsync(Guid id)
+        public async Task<Result<User>> GetByIdAsync(Guid id)
         {
             var entity = await _context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id == id);
             
             if (entity == null)
             {
-                throw new NotFoundException($"Пользователь с id: {id} не найден");
+                return Result<User>.Fail(new ErrorObject(ErrorType.NotFound, $"Пользователь с id: {id} не найден"));
             }
 
             var result = User.Create(entity.Id, entity.Login, entity.HashPassword, entity.IsBlocked, Enum.Parse<Role>(entity.Role)).Value;
 
             if(result == null)
             {
-                throw new InternalServerErrorException($"Произошла внутренняя ошибка сервера");
+                return Result<User>.Fail(new ErrorObject(ErrorType.Failure, $"Произошла внутренняя ошибка сервера"));
+
             }
 
-            return result;
+            return Result<User>.Success(result);
         }
 
-        public async Task<User> GetByLoginAsync(string login)
+        public async Task<Result<User>> GetByLoginAsync(string login)
         {
             var entity = await _context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Login == login);
 
             if (entity == null)
             {
-                throw new NotFoundException($"Пользователь с логином: {login} не найден");
+                return Result<User>.Fail(new ErrorObject(ErrorType.NotFound, $"Пользователь с логином: {login} не найден"));
             }
 
             var result = User.Create(entity.Id, entity.Login, entity.HashPassword, entity.IsBlocked, Enum.Parse<Role>(entity.Role)).Value;
 
             if (result == null)
             {
-                throw new InternalServerErrorException($"Произошла внутренняя ошибка сервера");
+                return Result<User>.Fail(new ErrorObject(ErrorType.Failure, $"Произошла внутренняя ошибка сервера"));
             }
 
-            return result;
+            return Result<User>.Success(result);
         }
 
         public async Task<List<User>> GetByRoleAsync(Role role)
@@ -113,13 +114,13 @@ namespace Infrastructure.DB.Repository
             return result;
         }
 
-        public async Task<Guid> UpdateAsync(User user)
+        public async Task<Result<Guid>> UpdateAsync(User user)
         {
             var entity = await _context.Users.FirstOrDefaultAsync(u => u.Id == user.Id);
 
             if (entity == null) 
             {
-                throw new NotFoundException($"Пользователя с id: {user.Id} не найден");
+                return Result<Guid>.Fail(new ErrorObject(ErrorType.NotFound, $"Пользователя с id: {user.Id} не найден"));
             }
 
             entity.Login = user.Login;
@@ -128,7 +129,7 @@ namespace Infrastructure.DB.Repository
             entity.Role = user.UserRole.ToString();
 
             await _context.SaveChangesAsync();
-            return entity.Id;
+            return Result<Guid>.Success(entity.Id);
         }
     }
 }

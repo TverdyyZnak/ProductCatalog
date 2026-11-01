@@ -1,5 +1,8 @@
+using Infrastructure.DI;
+using Application.DI;
 using Infrastructure.DB;
 using Microsoft.EntityFrameworkCore;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +14,9 @@ builder.Services.AddDbContext<AppDBContext>(options =>
     var connectionString = builder.Configuration.GetConnectionString(nameof(AppDBContext));
     options.UseMySql(connectionString, new MySqlServerVersion(new Version(8, 0, 33)));
 });
+
+builder.Services.AddApplication();
+builder.Services.AddInfrastructure();
 
 var app = builder.Build();
 

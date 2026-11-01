@@ -3,12 +3,13 @@
 namespace Application.DTO.ProductDtos
 {
     public record UpdateProductDto(
-        Guid id,
-        string name,
-        string description,
-        decimal price,
-        string mainNote,
-        string subNote,
-        CategoryDto category
+        Guid Id,
+        string Name,
+        string Description,
+        decimal Price,
+        string MainNote,
+        string SubNote,
+        Guid CategoryId,
+        CategoryDto? Category
     );
 }
