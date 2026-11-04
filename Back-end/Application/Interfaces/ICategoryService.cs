@@ -1,5 +1,4 @@
 ﻿using Application.DTO.CategoryDtos;
-using Domain.Primitives;
 
 namespace Application.Interfaces
 {
