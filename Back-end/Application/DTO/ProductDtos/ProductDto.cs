@@ -1,8 +1,7 @@
-﻿using Domain.Models;
-
-namespace Application.DTO.ProductDtos
+﻿namespace Application.DTO.ProductDtos
 {
-    public record ProductDto(
+    public record ProductDto
+    (
         Guid Id,
         string Name,
         string Description,
@@ -10,6 +9,6 @@ namespace Application.DTO.ProductDtos
         string MainNote,
         string SubNote,
         Guid CaregoryId,
-        Category? Category
+        string CategoryName
     );
 }

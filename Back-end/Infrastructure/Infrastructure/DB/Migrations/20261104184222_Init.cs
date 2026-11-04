@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Infrastructure.DB.Migrations
+namespace Infrastructure.Infrastructure.DB.Migrations
 {
     /// <inheritdoc />
     public partial class Init : Migration
@@ -61,7 +61,7 @@ namespace Infrastructure.DB.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     SubNote = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    CategoryId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci")
+                    CategoryId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci")
                 },
                 constraints: table =>
                 {
@@ -70,7 +70,8 @@ namespace Infrastructure.DB.Migrations
                         name: "FK_Products_Categories_CategoryId",
                         column: x => x.CategoryId,
                         principalTable: "Categories",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 

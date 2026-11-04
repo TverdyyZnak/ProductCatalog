@@ -5,7 +5,7 @@ using ProductCatalog.API.Contracts.CategoryContracts;
 namespace ProductCatalog.API.Controllers
 {
     [ApiController]
-    [Route("api/category")]
+    [Route("api/categories")]
     public class CategoryController : ControllerBase
     {
         private readonly ICategoryService _categoryService;
@@ -30,11 +30,11 @@ namespace ProductCatalog.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Guid>> CreateNewCategory(string name)
+        public async Task<ActionResult> CreateNewCategory(string name)
         {
             CategoryRequest request = new CategoryRequest(null, name);
             var result = await _categoryService.CreateCategoryAsync(CategoryDtoConvertor.ConvertToDto(request));
-            return Ok(result);
+            return Created();
         }
 
         [HttpDelete]

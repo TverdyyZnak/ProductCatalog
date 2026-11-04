@@ -1,5 +1,6 @@
 ﻿using Infrastructure.DB.Entities;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 namespace Infrastructure.DB
 {
@@ -8,6 +9,13 @@ namespace Infrastructure.DB
         public AppDBContext(DbContextOptions<AppDBContext> options) : base(options)
         {
             
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
 
         public DbSet<UserEntity> Users {  get; set; }
