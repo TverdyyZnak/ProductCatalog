@@ -13,6 +13,10 @@ namespace Infrastructure.DI
         public static IServiceCollection AddInfrastructure(this IServiceCollection services)
         {
             services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IUserActionRepository, UserActionRepository>();
+
             services.AddScoped<IPasswordHasher, PasswordHasher>();
 
             return services;

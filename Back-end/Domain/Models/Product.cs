@@ -13,7 +13,7 @@ namespace Domain.Models
         public string MainNote { get; } = string.Empty;
         public string SubNote { get; } = string.Empty;
         public Guid CategoryId { get; }
-        public Category? Category { get; } = null;
+        public Category? Category { get; private set; } = null;
 
         private Product(Guid id, string name, string desc, decimal price, string mNote, string sNote, Guid categoryId, Category? category)
         {
@@ -42,6 +42,11 @@ namespace Domain.Models
             }
 
             return Result<Product>.Success(new Product(id, name, desc, price, mNote, sNote, categoryId, category));
+        }
+
+        public void AddCategory(Category category)
+        {
+            Category = category;
         }
     }
 }

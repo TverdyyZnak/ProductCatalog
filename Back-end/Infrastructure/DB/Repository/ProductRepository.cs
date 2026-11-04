@@ -48,14 +48,14 @@ namespace Infrastructure.DB.Repository
 
         public async Task<List<Product>> GetAllAsync()
         {
-            var entities = await _context.Products.AsNoTracking().ToListAsync();
+            var entities = await _context.Products.AsNoTracking().Include(p => p.Category).ToListAsync();
             List<Product> products = ConvertToProductList(entities);
             return products;
         }
 
         public async Task<List<Product>> GetByCategoryAsync(Guid categoryId)
         {
-            var entities = await _context.Products.AsNoTracking().Where(p => p.CategoryId == categoryId).ToListAsync();
+            var entities = await _context.Products.AsNoTracking().Where(p => p.CategoryId == categoryId).Include(p => p.Category).ToListAsync();
             
             if(entities.Count == 0)
             {
@@ -68,7 +68,7 @@ namespace Infrastructure.DB.Repository
 
         public async Task<Result<Product>> GetByIdAsync(Guid id)
         {
-            var entity = await _context.Products.AsNoTracking().FirstOrDefaultAsync(p => p.Id == id);
+            var entity = await _context.Products.AsNoTracking().Include(p => p.Category).FirstOrDefaultAsync(p => p.Id == id);
 
             if(entity == null)
             {
@@ -118,8 +118,20 @@ namespace Infrastructure.DB.Repository
         private List<Product> ConvertToProductList(List<ProductEntity> entities) 
         {
             List<Product> products = entities
-                .Select(p => Product.Create(p.Id, p.Name, p.Description, p.Price, p.MainNote, p.SubNote, p.CategoryId, null).Value)
-                .Where(p => p != null).ToList()!;
+                .Select(p => Product.Create
+                    (
+                        p.Id,
+                        p.Name,
+                        p.Description,
+                        p.Price,
+                        p.MainNote,
+                        p.SubNote,
+                        p.CategoryId,
+                        Category.Create(p.Category!.Id, p.Category.Name).Value)
+                    )
+                .Where(r => r.IsSuccess)
+                .Select(r => r.Value)
+                .ToList()!;
             return products;
         }
     }

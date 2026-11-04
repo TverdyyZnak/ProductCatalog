@@ -1,14 +1,14 @@
-﻿using Application.DTO.CategoryDtos;
-
+﻿
 namespace Application.DTO.ProductDtos
 {
-    public record CreateProductDto(
+    public record ProductDtoCreate
+    (
         string Name,
         string Description,
         decimal Price,
         string MainNote,
         string SubNote,
-        Guid CategoryId,
-        CategoryDto? Category
+        Guid CaregoryId
     );
+
 }

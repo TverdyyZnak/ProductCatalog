@@ -4,19 +4,16 @@ using Infrastructure.DB;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Infrastructure.DB.Migrations
+namespace Infrastructure.Infrastructure.DB.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    [Migration("20261030163908_Init")]
-    partial class Init
+    partial class AppDBContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -37,7 +34,7 @@ namespace Infrastructure.DB.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
                 });
 
             modelBuilder.Entity("Infrastructure.DB.Entities.ProductEntity", b =>
@@ -46,7 +43,7 @@ namespace Infrastructure.DB.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
-                    b.Property<Guid?>("CategoryId")
+                    b.Property<Guid>("CategoryId")
                         .HasColumnType("char(36)");
 
                     b.Property<string>("Description")
@@ -72,7 +69,7 @@ namespace Infrastructure.DB.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", (string)null);
                 });
 
             modelBuilder.Entity("Infrastructure.DB.Entities.UserActionEntity", b =>
@@ -98,7 +95,7 @@ namespace Infrastructure.DB.Migrations
 
                     b.HasIndex("UserActorId");
 
-                    b.ToTable("UserActions");
+                    b.ToTable("UserActions", (string)null);
                 });
 
             modelBuilder.Entity("Infrastructure.DB.Entities.UserEntity", b =>
@@ -124,14 +121,16 @@ namespace Infrastructure.DB.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("Infrastructure.DB.Entities.ProductEntity", b =>
                 {
                     b.HasOne("Infrastructure.DB.Entities.CategoryEntity", "Category")
                         .WithMany()
-                        .HasForeignKey("CategoryId");
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Category");
                 });
