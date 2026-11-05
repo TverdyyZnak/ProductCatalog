@@ -8,8 +8,8 @@ namespace Domain.Models
     {
         public Guid Id { get; }
         public string Login {  get; }
-        public string Password { get; }
-        public bool IsBlocked { get; } = false;
+        public string Password { get; private set; }
+        public bool IsBlocked { get; private set; } = false;
         public Role UserRole { get; }
 
         private User(Guid id, string login, string password, bool isBlocked, Role role)
@@ -41,6 +41,16 @@ namespace Domain.Models
             }
 
             return Result<User>.Success(new User(id, login, password, isBlocked, role));
+        }
+
+        public void ChangePassword(string password)
+        {
+            Password = password;
+        }
+
+        public void ChangeBlockStatus(bool status) 
+        {
+            IsBlocked = status;
         }
     }
 }
