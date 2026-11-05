@@ -6,7 +6,7 @@ namespace Application.Interfaces
     {
         Task<List<ProductDto>> GetAllProductsAsync();
         Task<ProductDto> GetProductByIdAsync(Guid id);
-        Task<ProductDto> GetProductByFilter();
+        Task<List<ProductDto>> GetProductByFilter(ProductFiltre filtre);
         Task<List<ProductDto>> GetProductsByCategoryAsync(Guid categoryId);
         Task<Guid> CreateProductAsync(ProductDtoCreate productDto);
         Task<Guid> UpdateProductAsync(Guid id, ProductDtoUpdate productDto);

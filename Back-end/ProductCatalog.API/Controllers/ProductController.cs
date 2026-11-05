@@ -3,6 +3,7 @@ using Application.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ProductCatalog.API.Contracts.ProductContract;
+using ProductCatalog.API.Contracts.ProductContracts;
 using System.Security.Claims;
 
 namespace ProductCatalog.API.Controllers
@@ -33,10 +34,17 @@ namespace ProductCatalog.API.Controllers
             }
         }
 
+        //[HttpGet]
+        //public async Task<ActionResult<List<ProductResponse>>> GetAllProducts()
+        //{
+        //    var result = await _productService.GetAllProductsAsync();
+        //    return Ok(ProductDtoConvertor.ToResponse(result));
+        //}
+
         [HttpGet]
-        public async Task<ActionResult<List<ProductResponse>>> GetAllProducts()
+        public async Task<ActionResult<List<ProductResponse>>> GetProductsByFiltre([FromQuery] ProductFiltreRequest request)
         {
-            var result = await _productService.GetAllProductsAsync();
+            var result = await _productService.GetProductByFilter(ProductDtoConvertor.ToDto(request));
             return Ok(ProductDtoConvertor.ToResponse(result));
         }
 
