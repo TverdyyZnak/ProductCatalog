@@ -1,4 +1,5 @@
 ﻿using Application.DTO.ProductDtos;
+using ProductCatalog.API.Contracts.ProductContracts;
 
 namespace ProductCatalog.API.Contracts.ProductContract
 {
@@ -55,6 +56,20 @@ namespace ProductCatalog.API.Contracts.ProductContract
                 );
 
             return result;
+        }
+
+        public static ProductFiltre ToDto(ProductFiltreRequest request)
+        {
+            ProductFiltre filtre = new ProductFiltre
+            (
+                request.SearchName,
+                request.MinPrice,
+                request.MaxPrice,
+                request.CategoryId,
+                request.SortBy
+            );
+
+            return filtre;
         }
     }
 }

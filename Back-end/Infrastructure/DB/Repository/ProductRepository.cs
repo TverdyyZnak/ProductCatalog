@@ -94,6 +94,51 @@ namespace Infrastructure.DB.Repository
             return Result<Product>.Success(product.Value!);
         }
 
+        public async Task<List<Product>> GetProductByFiltre(string? searchName, decimal? minPrice, decimal? maxPrice, Guid? categoryId, string? sortBy)
+        {
+            IQueryable<ProductEntity> query = _context.Products.AsNoTracking().Include(p => p.Category);
+
+            if(!string.IsNullOrWhiteSpace(searchName))
+            {
+                var lowetName = searchName.ToLower();
+                query = query.Where(p => p.Name.ToLower().Contains(lowetName));
+            }
+
+            if(minPrice.HasValue)
+            {
+                query = query.Where(p => p.Price >= minPrice);
+            }
+
+            if (maxPrice.HasValue)
+            {
+                query = query.Where(p => p.Price <= maxPrice);
+            }
+
+            if (categoryId.HasValue) 
+            {
+                query = query.Where(p => p.CategoryId == categoryId);
+            }
+
+            if (!string.IsNullOrWhiteSpace(sortBy)) 
+            {
+                switch (sortBy.ToLower())
+                {
+                    case "price":
+                        query = query.OrderBy(p => p.Price);
+                        break;
+                    case "name":
+                        query = query.OrderBy(p => p.Name);
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            var products = await query.ToListAsync();
+
+            return ConvertToProductList(products);
+        }
+
         public async Task<Result<Guid>> UpdateAsync(Product product)
         {
             var entity = await _context.Products.FirstOrDefaultAsync(p => p.Id == product.Id);

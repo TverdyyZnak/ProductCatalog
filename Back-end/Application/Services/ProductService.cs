@@ -1,12 +1,9 @@
 ﻿
 using Application.Commons;
-using Application.DTO.CategoryDtos;
 using Application.DTO.Convertors;
 using Application.DTO.ProductDtos;
 using Application.Interfaces;
-using Domain.Models;
 using Domain.Repositories;
-using System.ComponentModel.DataAnnotations;
 
 namespace Application.Services
 {
@@ -64,9 +61,17 @@ namespace Application.Services
             return result.Value!;
         }
 
-        public Task<ProductDto> GetProductByFilter()
+        public async Task<List<ProductDto>> GetProductByFilter(ProductFiltre filtre)
         {
-            throw new NotImplementedException();
+            var products = await _productRepositort.GetProductByFiltre(filtre.SearchName, filtre.MinPrice, filtre.MaxPrice, filtre.CategoryId, filtre.SortBy);
+            var result = ProductConvertor.ToDto(products);
+
+            if (!result.IsSuccess) 
+            {
+                ExceptionAnalyst.ThrowException(result.Error);
+            }
+
+            return result.Value!;
         }
 
         public async Task<ProductDto> GetProductByIdAsync(Guid id)
