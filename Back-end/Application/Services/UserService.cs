@@ -10,10 +10,12 @@ namespace Application.Services
     {
         private readonly IUserRepository _userRepository;
         private readonly IPasswordHasher _passwordHasher;
-        public UserService(IUserRepository userRepository, IPasswordHasher passwordHasher)
+        private readonly IJwtGenerator _jwtGenerator;
+        public UserService(IUserRepository userRepository, IPasswordHasher passwordHasher, IJwtGenerator jwtGenerator)
         {
             _userRepository = userRepository;
             _passwordHasher = passwordHasher;
+            _jwtGenerator = jwtGenerator;
         }
 
         public async Task<Guid> BlockUserAsync(Guid id)
@@ -88,7 +90,7 @@ namespace Application.Services
             throw new NotImplementedException();
         }
 
-        public async Task<string> Login(string login, string password)
+        public async Task<string> LoginAsync(string login, string password)
         {
             var user = await _userRepository.GetByLoginAsync(login);
 
@@ -99,7 +101,7 @@ namespace Application.Services
 
             if (_passwordHasher.VerifyPassword(password, user.Value!.Password))
             {
-                return "Вход";
+                return _jwtGenerator.GenerateToken(user.Value);
             }
             else
             {
@@ -124,7 +126,7 @@ namespace Application.Services
 
             }
 
-            return "Крутой";
+            return _jwtGenerator.GenerateToken(newUser.Value);
         }
 
         public async Task<Guid> UnblockUserAsync(Guid id)

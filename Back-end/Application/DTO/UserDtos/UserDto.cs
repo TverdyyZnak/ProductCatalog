@@ -1,6 +1,4 @@
-﻿using Domain.Primitives.Enums;
-
-namespace Application.DTO.UserDtos
+﻿namespace Application.DTO.UserDtos
 {
     public record UserDto
     (
