@@ -4,9 +4,10 @@ namespace Application.DTO.UserDtos
 {
     public record UserDto
     (
-        Guid id,
-        string login,
-        bool isBlocked,
-        Role userRole
+        Guid Id,
+        string Login,
+        string HashPass,
+        bool IsBlocked,
+        string UserRole
     );
 }
