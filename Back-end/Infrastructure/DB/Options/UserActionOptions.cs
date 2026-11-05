@@ -11,7 +11,6 @@ namespace Infrastructure.DB.Options
             builder.ToTable("UserActions");
 
             builder.HasKey(ua => ua.Id);
-            builder.HasOne(ua => ua.UserActor);
         }
     }
 }

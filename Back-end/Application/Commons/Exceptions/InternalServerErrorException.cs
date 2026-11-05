@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace Domain.Exceptions
+namespace Application.Commons.Exceptions
 {
     public class InternalServerErrorException : BaseException
     {
@@ -8,7 +8,7 @@ namespace Domain.Exceptions
 
         public InternalServerErrorException(string message) : base(message)
         {
-            
+
         }
     }
 }

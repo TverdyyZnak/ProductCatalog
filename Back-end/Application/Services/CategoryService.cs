@@ -1,7 +1,7 @@
-﻿using Application.DTO.CategoryDtos;
+﻿using Application.Commons;
+using Application.DTO.CategoryDtos;
 using Application.DTO.Convertors;
 using Application.Interfaces;
-using Domain.Exceptions;
 using Domain.Models;
 using Domain.Repositories;
 
@@ -23,7 +23,7 @@ namespace Application.Services
 
             if (!result.IsSuccess)
             {
-
+                ExceptionAnalyst.ThrowException(result.Error);
             }
 
             return result.Value;
@@ -35,7 +35,7 @@ namespace Application.Services
 
             if (!result.IsSuccess)
             {
-
+                ExceptionAnalyst.ThrowException(result.Error);
             }
 
             return result.Value;
@@ -59,7 +59,7 @@ namespace Application.Services
 
             if (!result.IsSuccess)
             {
-
+                ExceptionAnalyst.ThrowException(result.Error);
             }
 
             return result.Value;

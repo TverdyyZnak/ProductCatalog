@@ -1,6 +1,5 @@
-﻿using Domain.Models;
-using Domain.Primitives;
-using Domain.Repositories;
+﻿using Application.Commons;
+using Application.Interfaces;
 using Infrastructure.DB.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,34 +14,34 @@ namespace Infrastructure.DB.Repository
             _context = context;
         }
 
-        public async Task<Result<Guid>> CreateAsync(UserAction userAction)
+        public async Task CreateActionAsync(UserAction action)
         {
-            var entity = new UserActionEntity
+            UserActionEntity entity = new UserActionEntity
             {
-                Id = userAction.Id,
-                Text = userAction.Text,
-                ActionDate = userAction.ActionDate,
-                UserId = userAction.UserActorId
+                Id = action.Id,
+                UserId = action.UserId,
+                Text = action.Text,
+                ActionDateTime = action.ActionDateTime,
+                ActionType = action.ActionType
             };
 
             await _context.UserActions.AddAsync(entity);
             await _context.SaveChangesAsync();
 
-            return Result<Guid>.Success(entity.Id);
         }
 
-        public async Task<List<UserAction>> GetAllAsync()
+        public async Task<List<UserAction>> GetActionsByUserIdAsync(Guid userId)
         {
-            var entities = await _context.UserActions.AsNoTracking().ToListAsync();
-            List<UserAction> result = entities.Select(u => UserAction.Create(u.Id, u.Text, u.ActionDate, u.UserId).Value).ToList()!;
+            var entities = await _context.UserActions.AsNoTracking().Where(ua => ua.UserId == userId).OrderBy(ua => ua.ActionDateTime).ToListAsync();
+            var result = entities.Select(ua => new UserAction(ua.Id, ua.UserId, ua.Text, ua.ActionDateTime, ua.ActionType)).ToList();
             return result;
         }
 
-        public async Task<Result<List<UserAction>>> GetByUserIdAsync(Guid id)
+        public async Task<List<UserAction>> GetAllActionsAsync()
         {
-            var entity = await _context.UserActions.AsNoTracking().Where(u => u.Id == id).ToListAsync();
-            List<UserAction> result = entity.Select(u => UserAction.Create(u.Id, u.Text, u.ActionDate, u.UserId).Value).ToList()!;
-            return Result<List<UserAction>>.Success(result);
+            var entities = await _context.UserActions.AsNoTracking().OrderBy(ua => ua.ActionDateTime).ToListAsync();
+            var result = entities.Select(ua => new UserAction(ua.Id, ua.UserId, ua.Text, ua.ActionDateTime, ua.ActionType)).ToList();
+            return result;
         }
     }
 }

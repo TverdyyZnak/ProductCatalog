@@ -1,6 +1,5 @@
-﻿
+﻿using Application.Commons;
 using Application.DTO.CategoryDtos;
-using Domain.Exceptions;
 using Domain.Models;
 
 namespace Application.DTO.Convertors
@@ -14,7 +13,7 @@ namespace Application.DTO.Convertors
 
             if (!category.IsSuccess)
             {
-                throw new UnprocessableEntityException("Нарушены правила валидации на слое Domain"); //СЮДА ПЕРЕДАТЬ ПОТОМ ОБРАБОТЧИК ОШИБОК!!!
+                ExceptionAnalyst.ThrowException(category.Error);
             }
 
             return category.Value!;

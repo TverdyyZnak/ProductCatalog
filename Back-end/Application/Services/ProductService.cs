@@ -1,4 +1,5 @@
 ﻿
+using Application.Commons;
 using Application.DTO.CategoryDtos;
 using Application.DTO.Convertors;
 using Application.DTO.ProductDtos;
@@ -25,14 +26,14 @@ namespace Application.Services
 
             if (!product.IsSuccess)
             {
-                //ТУТ ОБРАБОТКА ОШИБОК
+                ExceptionAnalyst.ThrowException(product.Error);
             }
 
             var result = await _productRepositort.CreateAsync(product.Value!);
 
             if (!result.IsSuccess)
             {
-                //ТУТ ОБРАБОТКА ОШИБОК
+                ExceptionAnalyst.ThrowException(result.Error);
             }
 
             return result.Value;
@@ -44,7 +45,7 @@ namespace Application.Services
 
             if (!result.IsSuccess)
             {
-                //ТУТ ОБРАБОТКА ОШИБОК
+                ExceptionAnalyst.ThrowException(result.Error);
             }
 
             return result.Value;
@@ -57,10 +58,15 @@ namespace Application.Services
 
             if (!result.IsSuccess) 
             {
-                //ТУТ ОБРАБОТКА ОШИБОК
+                ExceptionAnalyst.ThrowException(result.Error);
             }
 
             return result.Value!;
+        }
+
+        public Task<ProductDto> GetProductByFilter()
+        {
+            throw new NotImplementedException();
         }
 
         public async Task<ProductDto> GetProductByIdAsync(Guid id)
@@ -69,14 +75,14 @@ namespace Application.Services
 
             if (!response.IsSuccess)
             {
-                ////ТУТ ОБРАБОТКА ОШИБОК
+                ExceptionAnalyst.ThrowException(response.Error);
             }
 
             var result = ProductConvertor.ToDto(response.Value!);
 
             if (!result.IsSuccess)
             {
-                ////ТУТ ОБРАБОТКА ОШИБОК
+                ExceptionAnalyst.ThrowException(result.Error);
             }
 
             return result.Value!;
@@ -89,30 +95,29 @@ namespace Application.Services
 
             if (!result.IsSuccess)
             {
-                ////ТУТ ОБРАБОТКА ОШИБОК
+                ExceptionAnalyst.ThrowException(result.Error);
             }
 
             return result.Value!;
         }
 
-        public Task<List<ProductDto>> GetProductsByNameAsync(string name)
+        public async Task<Guid> UpdateProductAsync(Guid id, ProductDtoUpdate productDto)
         {
-            throw new NotImplementedException();
-        }
+            var product = ProductConvertor.ToProduct(id, productDto);
 
-        public Task<List<ProductDto>> GetProductsByPriceAsync(decimal minPrice, decimal maxPrice)
-        {
-            throw new NotImplementedException();
-        }
+            if (!product.IsSuccess)
+            {
+                ExceptionAnalyst.ThrowException(product.Error);
+            }
 
-        public Task<List<ProductDto>> GetProductsByPriceAsync(decimal Price)
-        {
-            throw new NotImplementedException();
-        }
+            var result = await _productRepositort.UpdateAsync(product.Value!);
 
-        public Task<Guid> UpdateProductAsync(Guid id, ProductDtoUpdate productDto)
-        {
-            throw new NotImplementedException();
+            if (!result.IsSuccess)
+            {
+                ExceptionAnalyst.ThrowException(result.Error);
+            }
+
+            return result.Value!;
         }
     }
 }

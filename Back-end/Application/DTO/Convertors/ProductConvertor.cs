@@ -25,11 +25,11 @@ namespace Application.DTO.Convertors
             return result;
         }
 
-        public static Result<Product> ToProduct(ProductDtoUpdate dto)
+        public static Result<Product> ToProduct(Guid productId, ProductDtoUpdate dto)
         {
             var result = Product.Create
                 (
-                    Guid.NewGuid(),
+                    productId,
                     dto.Name,
                     dto.Description,
                     dto.Price,
