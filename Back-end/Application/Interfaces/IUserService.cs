@@ -1,5 +1,4 @@
 ﻿using Application.DTO.UserDtos;
-using Domain.Primitives;
 
 namespace Application.Interfaces
 {
@@ -15,6 +14,6 @@ namespace Application.Interfaces
         Task<Guid> BlockUserAsync(Guid id);
         Task<Guid> UnblockUserAsync(Guid id);
         Task<string> RegistrationAsync(UserDtoCreate user);
-        Task<string> Login(string login, string password);
+        Task<string> LoginAsync(string login, string password);
     }
 }

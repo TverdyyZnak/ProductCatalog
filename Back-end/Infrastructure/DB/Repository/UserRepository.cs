@@ -37,6 +37,7 @@ namespace Infrastructure.DB.Repository
             await _context.Users.AddAsync(entity);
             await _context.SaveChangesAsync();
 
+            
             return Result<Guid>.Success(entity.Id);
         }
 

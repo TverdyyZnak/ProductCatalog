@@ -17,6 +17,7 @@ builder.Services.AddDbContext<AppDBContext>(options =>
 
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure();
+builder.Services.AddAuthService();
 
 var app = builder.Build();
 
