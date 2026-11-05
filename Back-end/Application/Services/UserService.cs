@@ -1,7 +1,9 @@
-﻿using Application.DTO.Convertors;
+﻿using Application.Commons;
+using Application.DTO.Convertors;
 using Application.DTO.UserDtos;
 using Application.Interfaces;
 using Domain.Models;
+using Domain.Primitives;
 using Domain.Repositories;
 
 namespace Application.Services
@@ -24,10 +26,17 @@ namespace Application.Services
 
             if (!user.IsSuccess) 
             {
-                
+                ExceptionAnalyst.ThrowException(user.Error);
             }
 
             user.Value!.ChangeBlockStatus(true);
+            var result = await _userRepository.UpdateAsync(user.Value);
+
+            if (!result.IsSuccess)
+            {
+                ExceptionAnalyst.ThrowException(result.Error);
+            }
+
             return id;
         }
 
@@ -37,7 +46,7 @@ namespace Application.Services
 
             if (!result.IsSuccess)
             {
-
+                ExceptionAnalyst.ThrowException(result.Error);
             }
 
             return userId;
@@ -50,15 +59,10 @@ namespace Application.Services
 
             if (!result.IsSuccess)
             {
-
+                ExceptionAnalyst.ThrowException(result.Error);
             }
 
             return result.Value!;
-        }
-
-        public Task<List<UserDto>> GetUserByActionAsunc(bool isBlocked)
-        {
-            throw new NotImplementedException();
         }
 
         public async Task<UserDto> GetUserByIdAsync(Guid id)
@@ -67,45 +71,35 @@ namespace Application.Services
 
             if (!user.IsSuccess) 
             {
-
+                ExceptionAnalyst.ThrowException(user.Error);
             }
 
             var result = UserConvertor.ToDto(user.Value!);
 
             if (!result.IsSuccess)
             {
-
+                ExceptionAnalyst.ThrowException(result.Error);
             }
 
             return result.Value!;
         }
 
-        public Task<UserDto> GetUserByLoginAsync(string login)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<List<UserDto>> GetUserByRoleAsync(string role)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<string> LoginAsync(string login, string password)
+        public async Task<UserLogin> LoginAsync(string login, string password)
         {
             var user = await _userRepository.GetByLoginAsync(login);
 
             if (!user.IsSuccess)
             {
-                //ОШИБКА С ПАРОЛЕМ ИЛИ ЛОГИНОМ
+                ExceptionAnalyst.ThrowException(user.Error);
             }
 
             if (_passwordHasher.VerifyPassword(password, user.Value!.Password))
             {
-                return _jwtGenerator.GenerateToken(user.Value);
+                return new UserLogin(user.Value.Id, _jwtGenerator.GenerateToken(user.Value));
             }
             else
             {
-                throw new Exception("dfdfdf");//ОШИБКА С ПАРОЛЕМ ИЛИ ЛОГИНОМ
+                throw new Exception("Неверный логин или пароль");
             }
         }
 
@@ -115,6 +109,7 @@ namespace Application.Services
 
             if (!newUser.IsSuccess) 
             {
+                ExceptionAnalyst.ThrowException(newUser.Error);
 
             }
 
@@ -123,7 +118,7 @@ namespace Application.Services
 
             if (!result.IsSuccess) 
             {
-
+                ExceptionAnalyst.ThrowException(result.Error);
             }
 
             return _jwtGenerator.GenerateToken(newUser.Value);
@@ -135,10 +130,18 @@ namespace Application.Services
 
             if (!user.IsSuccess)
             {
-
+                ExceptionAnalyst.ThrowException(user.Error);
             }
 
             user.Value!.ChangeBlockStatus(false);
+            var result = await _userRepository.UpdateAsync(user.Value);
+
+            if(!result.IsSuccess)
+            {
+                ExceptionAnalyst.ThrowException(result.Error);
+
+            }
+
             return id;
         }
 
@@ -148,12 +151,12 @@ namespace Application.Services
 
             if (!user.IsSuccess)
             {
-
+                ExceptionAnalyst.ThrowException(user.Error);
             }
 
             if (!_passwordHasher.VerifyPassword(oldPass, user.Value!.Password)) 
             {
-               //ИСКЛЮЧЕНИЕ
+                throw new Exception("Неверный пароль");
             }
 
             user.Value.ChangePassword(_passwordHasher.HashGenerate(newPass));
@@ -162,7 +165,7 @@ namespace Application.Services
 
             if (!result.IsSuccess)
             {
-
+                ExceptionAnalyst.ThrowException(result.Error);
             }
 
             return userId;

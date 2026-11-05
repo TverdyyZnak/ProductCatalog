@@ -10,7 +10,7 @@ namespace Infrastructure.Security
     public class JwtGenerator : IJwtGenerator
     {
         //ТОЛЬКО ДЛЯ ТЕСТОВОГО ЗАДАНИЯ
-        public static readonly TimeSpan _timeSpan = new TimeSpan(2, 0, 0);
+        public static readonly TimeSpan _timeSpan = new TimeSpan(1, 0, 0);
         public const string _jwtK = "QCNyacyyt2c6CBE6QTCW8B8CQBjKLSJihchi87773Dfdksv";
 
         public string GenerateToken(User user)

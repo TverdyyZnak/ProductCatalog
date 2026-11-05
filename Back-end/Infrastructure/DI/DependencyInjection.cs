@@ -54,8 +54,7 @@ namespace Infrastructure.DI
             {
                 options.AddPolicy("AdminOnly", policy => policy
                     .RequireRole("Admin")
-                    .RequireAssertion(context =>
-                        context.User.HasClaim(c => c.Type == "isBlocked" && c.Value == "false"))
+                    .RequireAssertion(context => context.User.HasClaim(c => c.Type == "isBlocked" && c.Value.ToLower() == "false"))
                 );
 
                 options.AddPolicy("ProFunctions", policy => policy
@@ -65,7 +64,7 @@ namespace Infrastructure.DI
 
                 options.AddPolicy("StandartFunctions", policy => policy
                     .RequireRole("Admin", "ProUser", "User")
-                    .RequireAssertion(context => context.User.HasClaim(c => c.Type == "isBlocked" && c.Value == "false"))
+                    .RequireAssertion(context => context.User.HasClaim(c => c.Type == "isBlocked" && c.Value.ToLower() == "false"))
                 );
             });
 

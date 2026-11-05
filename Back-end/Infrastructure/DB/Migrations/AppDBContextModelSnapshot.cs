@@ -78,22 +78,20 @@ namespace Infrastructure.DB.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
-                    b.Property<DateTime>("ActionDate")
+                    b.Property<DateTime>("ActionDateTime")
                         .HasColumnType("datetime(6)");
+
+                    b.Property<int>("ActionType")
+                        .HasColumnType("int");
 
                     b.Property<string>("Text")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<Guid?>("UserActorId")
-                        .HasColumnType("char(36)");
-
                     b.Property<Guid>("UserId")
                         .HasColumnType("char(36)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("UserActorId");
 
                     b.ToTable("UserActions", (string)null);
                 });
@@ -133,15 +131,6 @@ namespace Infrastructure.DB.Migrations
                         .IsRequired();
 
                     b.Navigation("Category");
-                });
-
-            modelBuilder.Entity("Infrastructure.DB.Entities.UserActionEntity", b =>
-                {
-                    b.HasOne("Infrastructure.DB.Entities.UserEntity", "UserActor")
-                        .WithMany()
-                        .HasForeignKey("UserActorId");
-
-                    b.Navigation("UserActor");
                 });
 #pragma warning restore 612, 618
         }

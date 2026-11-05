@@ -1,4 +1,5 @@
-﻿using Application.DTO.UserDtos;
+﻿using Application.Commons.Exceptions;
+using Application.DTO.UserDtos;
 using Domain.Models;
 using Domain.Primitives;
 using Domain.Primitives.Enums;
@@ -50,8 +51,8 @@ namespace Application.DTO.Convertors
                 case "Admin":
                     return Role.Admin;
                 default:
-                    //ТУТ ВЫКИНУТЬ ИСКЛЮЧЕНИЕ
-                    throw new Exception("sdsd");
+
+                    throw new UnprocessableEntityException("В поле 'Role' передан неверный аргумен");
             }
         }
     }
