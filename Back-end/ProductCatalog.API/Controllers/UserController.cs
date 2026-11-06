@@ -5,6 +5,7 @@ using ProductCatalog.API.Contracts.UserContracts;
 using System.Security.Claims;
 using Application.Commons;
 using Domain.Models;
+using Application.Commons.Exceptions;
 
 namespace ProductCatalog.API.Controllers
 {
@@ -43,12 +44,12 @@ namespace ProductCatalog.API.Controllers
         }
 
         [HttpPost("registration")]
-        //[Authorize(Policy = "AdminOnly")]
+        [Authorize(Policy = "AdminOnly")]
         public async Task<ActionResult<string>> Registration([FromBody] UserCreateRequest request)
         {
             var result = await _userService.RegistrationAsync(UserDtoConvertor.ToDto(request));
 
-            //await _userActionService.CreateAction(CurrentUserId, $"Администратор создал нового пользователя c логином {request.Login}", ActionType.Create);
+            await _userActionService.CreateAction(CurrentUserId, $"Администратор создал нового пользователя c логином {request.Login}", ActionType.Create);
             return Created();
         }
 
@@ -94,6 +95,11 @@ namespace ProductCatalog.API.Controllers
         [Authorize(Policy = "AdminOnly")]
         public async Task<ActionResult<Guid>> DeleteUser(Guid id)
         {
+            if(id == CurrentUserId)
+            {
+                throw new UnprocessableEntityException("Администратор не может удалить сам себя");
+            }
+
             var result = await _userService.DeleteUserAsync(id);
             await _userActionService.CreateAction(CurrentUserId, $"Администратор удалил пользователя с id:{id}", ActionType.Delete);
             return Ok(result);

@@ -22,7 +22,7 @@ namespace Infrastructure.DB.Repository
                 Id = product.Id,
                 Name = product.Name,
                 Description = product.Description,
-                Price = product.Price,
+                Price = decimal.Round(product.Price, 2, MidpointRounding.AwayFromZero),
                 MainNote = product.MainNote,
                 SubNote = product.SubNote,
                 CategoryId = product.CategoryId,

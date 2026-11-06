@@ -1,4 +1,5 @@
 ﻿using Application.Commons;
+using Application.Commons.Exceptions;
 using Application.DTO.Convertors;
 using Application.DTO.UserDtos;
 using Application.Interfaces;
@@ -105,6 +106,17 @@ namespace Application.Services
 
         public async Task<string> RegistrationAsync(UserDtoCreate user)
         {
+            if(user.Login.Length > ValidationTypes._maxNameLength)
+            {
+                throw new UnprocessableEntityException($"Длина догина больше {ValidationTypes._maxNameLength}");
+            }
+
+            if (user.Password.Length < ValidationTypes._minPasswordLength || user.Password.Length > ValidationTypes._maxPasswordLength)
+            {
+                throw new UnprocessableEntityException($"Длина пароля больше {ValidationTypes._maxNameLength} или меньше {ValidationTypes._minPasswordLength}");
+            }
+
+
             var newUser = UserConvertor.ToUser(user);
 
             if (!newUser.IsSuccess) 
