@@ -1,0 +1,56 @@
+﻿using Domain.Primitives;
+using Domain.Primitives.Enums;
+using Domain.Primitives.Interfaces;
+
+namespace Domain.Models
+{
+    public class User: IEntity
+    {
+        public Guid Id { get; }
+        public string Login {  get; }
+        public string Password { get; private set; }
+        public bool IsBlocked { get; private set; } = false;
+        public Role UserRole { get; }
+
+        private User(Guid id, string login, string password, bool isBlocked, Role role)
+        {
+            Id = id;
+            Login = login;
+            Password = password;
+            IsBlocked = isBlocked;
+            UserRole = role;
+        }
+
+        public static Result<User> Create(Guid id, string login, string password, bool isBlocked, Role role)
+        {
+            var errors = new List<ErrorObject>();
+
+            if (string.IsNullOrWhiteSpace(login)) 
+            {
+                errors.Add(new ErrorObject(ErrorType.Failure, "Логин не может быть пустым"));
+            }
+
+            if (string.IsNullOrWhiteSpace(password))
+            {
+                errors.Add(new ErrorObject(ErrorType.Failure, "Пароль не может быть пустым"));
+            }
+
+            if (errors.Any())
+            {
+                return Result<User>.Fail(errors);
+            }
+
+            return Result<User>.Success(new User(id, login, password, isBlocked, role));
+        }
+
+        public void ChangePassword(string password)
+        {
+            Password = password;
+        }
+
+        public void ChangeBlockStatus(bool status) 
+        {
+            IsBlocked = status;
+        }
+    }
+}

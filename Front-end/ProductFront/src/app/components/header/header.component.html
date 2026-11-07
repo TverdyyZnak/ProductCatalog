@@ -1,0 +1,8 @@
+<section>
+    <a (click)="toPage('')" >На главную</a>
+    @if (userJwt?.role == "Admin") 
+    {
+        <a (click)="toPage('admin')">Страница администратора</a>
+    }
+    <a (click)="toPage('enter')">Вход</a>
+</section>
