@@ -7,6 +7,6 @@
         decimal Price,
         string MainNote,
         string SubNote,
-        Guid CaregoryId
+        Guid CategoryId
     );
 }

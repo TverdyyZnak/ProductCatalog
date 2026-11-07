@@ -64,7 +64,6 @@ namespace ProductCatalog.API.Controllers
         }
 
         [HttpPost("logout")]
-        [Authorize]
         public async Task<ActionResult> Logout()
         {
             HttpContext.Response.Cookies.Delete("JCook");

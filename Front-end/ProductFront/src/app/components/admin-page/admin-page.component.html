@@ -1,0 +1,65 @@
+<main>
+    <section class="actions-list">
+        @for (action of userActions; track $index) 
+        {
+            <div class="card">
+                <h4>id пользователя: {{action.userId}}</h4>
+                <h4>время: {{action.actionDateTime}}</h4>
+                <h4>тип действия: {{action.actionType}}</h4>
+                <h4>Текст: {{action.text}}</h4>
+            </div>
+        }
+    </section>
+    <section class="user-list">
+        @for (user of users; track $index) 
+        {
+            <div class="card">
+                <div class="info">
+                    <h4>id пользователя: {{user.id}}</h4>
+                    <h4>Логин: {{user.login}}</h4>
+                    <h4>Роль: {{user.userRole}}</h4>
+                    <h4>Заблокирован: {{user.isBlocked}}</h4>
+                </div>
+                @if (userJwt!.id != user.id) 
+                {
+                    <div class="buttons">
+                        @if (!user.isBlocked) 
+                        {
+                            <button class="main-button"  (click)="blockUser(user.id)">Заблокировать</button>
+                        }
+                        @else 
+                        {
+                            <button class="main-button" (click)="unblockUser(user.id)">Разблокировать</button>
+                        }
+                        <button class="main-button" (click)="deleteUser(user.id)">Удалить</button>
+                        <button class="main-button" (click)="isOpen = true; targetId = user.id">Изменит пароль</button>
+                    </div>
+                }
+            </div>
+        }
+    </section>
+</main>
+
+@if (isOpen) {
+  <div class="change-password">
+    <section>
+      <h2>Изменение пароля</h2>
+
+      <label>Старый пароль</label>
+      <input type="password" placeholder="Введите старый пароль" #oldP>
+
+      <label>Новый пароль</label>
+      <input type="password" placeholder="Введите новый пароль" #newP>
+
+      <div class="change-password-buttons">
+        <button class="main-button" (click)="changePassword(targetId!, oldP.value, newP.value)">
+          Поменять пароль
+        </button>
+
+        <button class="main-button" (click)="isOpen = false">
+          Закрыть
+        </button>
+      </div>
+    </section>
+  </div>
+}

@@ -1,0 +1,34 @@
+<main>
+    <div>
+        <section class="login">
+            <h1>Вход</h1>
+            <h2>Ваш логин</h2>
+            <input type="text" placeholder="Логин" #enterLogin>
+            <h2>Ваш пароль</h2>
+            <input type="password" placeholder="Пароль" #enterPass>
+            <button class="main-button" (click)="login(enterLogin.value, enterPass.value)">Войти</button>
+        </section>
+        @if (userJwt?.role == "Admin") 
+        {
+            <section class="reg">
+                <h1>Регистрация нового пользователя</h1>
+                <h2>Логин</h2>
+                <input type="text" placeholder="Логин" #regL>
+                <h2>Пароль</h2>
+                <input type="password" placeholder="Пароль" #regP>
+                <h2>Роль</h2>
+                <select #regR>
+                    <option value="User">Пользователь</option>
+                    <option value="ProUser">Продвинутый пользователь</option>
+                    <option value="Admin">Администратор</option>
+                </select>
+                <button class="main-button" (click)="reg(regL.value, regP.value, regR.value)" >Создать</button>
+            </section>
+        }
+    </div>
+    @if (userJwt != null) 
+    {
+        <button class="main-button" (click)="logout()">Выйти</button>
+    }
+    
+</main>
