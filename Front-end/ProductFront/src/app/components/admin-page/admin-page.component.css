@@ -1,0 +1,116 @@
+main{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+
+    .actions-list{
+        margin-top: 7%;
+        padding: 16px;
+        width: 40%;
+        height: 80%;
+        border: solid 2px #7b3529;
+        border-radius: 16px;
+        overflow: auto;
+
+        .card{
+            border-bottom: solid 2px #7b3529;
+        }
+    }
+
+    .user-list{
+        margin-top: 7%;
+        padding: 16px;
+        width: 40%;
+        height: 80%;
+        border: solid 2px #7b3529;
+        border-radius: 16px;
+        overflow: auto;
+
+        
+        .card{
+            border-bottom: solid 2px #7b3529;
+            display: flex;
+            flex-direction: row;
+            margin-bottom: 20px;
+            justify-content: space-between;
+            align-items: center;
+
+            .info{
+                height: 90%;
+            }
+
+            .buttons{
+                display: flex;
+                flex-direction: column;
+                button{
+                    font-size: 20px;
+                    margin-right: 20px;
+                    width: auto;
+                    margin-bottom: 4px;
+                }
+            }
+        }
+    }
+}
+
+.change-password {
+    position: fixed;
+    inset: 0;
+    z-index: 110;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(3px);
+}
+
+.change-password section {
+    width: 400px;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    background: #F5EBD5;
+    border: 2px solid #7b3529;
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+}
+
+.change-password h2 {
+    text-align: center;
+    color: #7b3529;
+    margin-bottom: 15px;
+}
+
+.change-password label {
+    color: #40403f;
+    font-weight: 600;
+}
+
+.change-password input {
+    padding: 10px;
+    border: 1px solid #7b3529;
+    border-radius: 6px;
+    background: #fffaf0;
+    outline: none;
+    font-size: 15px;
+}
+
+.change-password input:focus {
+    border-color: #a34b3d;
+    box-shadow: 0 0 4px rgba(123, 53, 41, 0.4);
+}
+
+.change-password-buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.change-password-buttons button {
+    flex: 1;
+}

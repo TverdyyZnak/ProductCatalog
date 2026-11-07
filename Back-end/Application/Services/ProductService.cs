@@ -1,5 +1,6 @@
 ﻿
 using Application.Commons;
+using Application.Commons.Exceptions;
 using Application.DTO.Convertors;
 using Application.DTO.ProductDtos;
 using Application.Interfaces;
@@ -19,6 +20,21 @@ namespace Application.Services
 
         public async Task<Guid> CreateProductAsync(ProductDtoCreate productDto)
         {
+            if(productDto.SubNote.Length > ValidationTypes._maxNoteLength || productDto.MainNote.Length > ValidationTypes._maxNoteLength)
+            {
+                throw new UnprocessableEntityException($"Длина полей примечаний больше {ValidationTypes._maxNoteLength}");
+            }
+
+            if (productDto.Name.Length > ValidationTypes._maxNameLength)
+            {
+                throw new UnprocessableEntityException($"Длина названия больше {ValidationTypes._maxNameLength}");
+            }
+
+            if (productDto.Description.Length > ValidationTypes._maxDescriptionLength)
+            {
+                throw new UnprocessableEntityException($"Длина описания больше {ValidationTypes._maxDescriptionLength}");
+            }
+
             var product = ProductConvertor.ToProduct(productDto);
 
             if (!product.IsSuccess)
@@ -108,6 +124,21 @@ namespace Application.Services
 
         public async Task<Guid> UpdateProductAsync(Guid id, ProductDtoUpdate productDto)
         {
+            if (productDto.SubNote.Length > ValidationTypes._maxNoteLength || productDto.MainNote.Length > ValidationTypes._maxNoteLength)
+            {
+                throw new UnprocessableEntityException($"Длина полей примечаний больше {ValidationTypes._maxNoteLength}");
+            }
+
+            if (productDto.Name.Length > ValidationTypes._maxNameLength)
+            {
+                throw new UnprocessableEntityException($"Длина названия больше {ValidationTypes._maxNameLength}");
+            }
+
+            if (productDto.Description.Length > ValidationTypes._maxDescriptionLength)
+            {
+                throw new UnprocessableEntityException($"Длина описания больше {ValidationTypes._maxDescriptionLength}");
+            }
+
             var product = ProductConvertor.ToProduct(id, productDto);
 
             if (!product.IsSuccess)

@@ -1,0 +1,256 @@
+<main>
+    <section class="products">
+        <div class="buttons">
+            <button class="main-button" (click)="inCatalog = true">Товары</button>
+            <button class="main-button" (click)="inCatalog = false">Категории</button>
+        </div>
+        <div class="list">
+
+            @if (inCatalog)
+            {
+                @for (product of products; track $index)
+                {
+                    <div class="card" (click)="getCurrentProduct(product.id)">
+                        <img src="photo.jpg">
+                        <div class="info">
+                            <h2>{{product.name}}</h2>
+                            <h3>{{product.price}} BYN</h3>
+                        </div>
+                        <div class="p-tools">
+                            @if(userJwt?.isBlocked == false && userJwt != null) 
+                            {
+                                <button (click)="productUpdateIsV = true" class="main-button">U</button>
+                            }
+                            @else if (userJwt?.isBlocked == false && userJwt!.role != "User" && userJwt != null) 
+                            {
+                                <button (click)="deleteProduct(product.id)" class="main-button">D</button>
+                            }
+                        </div>
+                    </div>
+                }
+            }
+            @else
+            {
+                @for (category of categories; track $index)
+                {
+                    <div class="card-category">
+                        <img src="photo1.jpg">
+                        <div class="info">
+                            <h2>{{category.name}}</h2>
+                        </div>
+                        <div class="tools">
+
+                        </div>
+                    </div>
+                }
+            }
+
+        </div>
+    </section>
+    <section class="options">
+        <div class="filter">
+            <h2>Введите название товара</h2>
+            <input class="name-input" type="text" placeholder="Название продукта" [(ngModel)] = "currentFiltre.SearchName">
+            <h2>Введите цену товара</h2>
+            <div>
+                <input type="number" placeholder="От" class="price" 
+                    [ngModel] = "currentFiltre.MinPrice"
+                    (ngModelChange)="currentFiltre.MinPrice = ($event ?? undefined)"
+                >
+
+                <input type="number" placeholder="До" 
+                    [ngModel]="currentFiltre.MaxPrice"
+                    (ngModelChange)="currentFiltre.MaxPrice = ($event ?? undefined)"
+                >
+            </div>
+            <h2>Выберите категорию</h2>
+            <select [(ngModel)]="currentFiltre.CategoryId">
+                <option value="" >-Выбор категории-</option>
+                @for (category of categories; track $index) 
+                {
+                    <option value="{{category.id}}">{{category.name}}</option>
+                }
+            </select>
+            <h2>Выберите способ сортировки</h2>
+            <select [(ngModel)]="currentFiltre.SortBy">
+                <option value="">-Выбор сортировки-</option>
+                <option value="name">По названию</option>
+                <option value="price">По стоимости</option>
+            </select>
+            <button class="main-button" style="margin-top: 5%;" (click)="loadProducts()">Поиск</button>
+        </div>
+        @if (userJwt != null && userJwt.isBlocked == false) 
+        {
+            <div class="tools">
+                @if (userJwt.role == "User") 
+                {
+                    <button class="main-button" (click)="createProductIsV = true">Добавить продукт</button>
+                }
+                @else
+                {
+                    <button class="main-button" (click)="createProductIsV = true">Добавить продукт</button>
+                    <button class="main-button" (click)="createCategoryIsV=true" >Добавить категорию</button>
+                }
+            </div>
+        }
+    </section>
+
+</main>
+
+@if (createCategoryIsV) 
+{
+    <div class="create-category">
+        <section>
+            <input type="text" placeholder="Название категории" #categoryCreateNaem>
+            <button class="main-button" (click)="createCategory(categoryCreateNaem.value)">Добавить</button>
+            <button class="main-button" (click)="createCategoryIsV = false">Закрыть</button>
+        </section>
+    </div>
+}
+
+@if (createProductIsV)
+{
+    <div class="create-product">
+        <section>
+            <h1>Создание товара</h1>
+
+            <label>Название продукта</label>
+            <input
+                type="text"
+                placeholder="Название продукта"
+                [(ngModel)]="newProduct.name"
+            >
+
+            <label>Описание</label>
+            <textarea
+                placeholder="Описание"
+                [(ngModel)]="newProduct.description"
+            ></textarea>
+
+            <label>Стоимость (BYN)</label>
+            <input
+                type="number"
+                placeholder="Стоимость"
+                [(ngModel)]="newProduct.price"
+            >
+
+            <label>Общее примечание</label>
+            <textarea
+                placeholder="Общее примечание"
+                [(ngModel)]="newProduct.mainNote"
+            ></textarea>
+
+            <label>Специальное примечание</label>
+            <textarea
+                placeholder="Специальное примечание"
+                [(ngModel)]="newProduct.subNote"
+            ></textarea>
+
+            <label>Категория</label>
+            <select [(ngModel)]="newProduct.categoryId">
+                <option value="">-Выбор категории-</option>
+
+                @for (category of categories; track category.id)
+                {
+                    <option [value]="category.id">
+                        {{category.name}}
+                    </option>
+                }
+            </select>
+
+            <div class="create-buttons">
+                <button class="main-button" (click)="createProduct()">
+                    Создать товар
+                </button>
+
+                <button class="main-button" (click)="createProductIsV = false">
+                    Отмена
+                </button>
+            </div>
+        </section>
+    </div>
+}
+
+
+@if (productInfoIsV) 
+{
+    <div class="product-info">
+        <section>
+            <h2>Название: {{currentProduct?.name}}</h2>
+            <h2>Цена: {{currentProduct?.price}}</h2>
+            <h2>Описание: {{currentProduct?.description}}</h2>
+            <h2>Примечание общее: {{currentProduct?.mainNote}}</h2>
+            <h2>Примечание специальное: {{currentProduct?.subNote}}</h2>
+            <button (click)="productInfoIsV = false">Закрыть</button>
+        </section>
+    </div>
+}
+
+@if (productUpdateIsV && currentProduct != null) 
+{
+    <div class="product-update">
+        <section>
+            <h1>Изменение товара</h1>
+
+            <label>Название продукта</label>
+            <input 
+                type="text" 
+                placeholder="Название продукта"
+                [(ngModel)]="currentProduct.name"
+            >
+
+            <label>Описание</label>
+            <textarea 
+                placeholder="Описание"
+                [(ngModel)]="currentProduct.description"
+            ></textarea>
+
+            <label>Стоимость (BYN)</label>
+            <input type="number" 
+                placeholder="Стоимость"
+                [ngModel]="currentProduct.price"
+                (ngModelChange)="currentProduct.price = ($event ?? undefined)"
+            >
+
+            <label>Общее примечание</label>
+            <textarea 
+                placeholder="Общее примечание"
+                [(ngModel)]="currentProduct.mainNote"
+            ></textarea>
+
+            <label>Специальное примечание</label>
+            <textarea 
+                placeholder="Специальное примечание"
+                [(ngModel)]="currentProduct.subNote"
+            ></textarea>
+
+            <label>Категория</label>
+            <select [(ngModel)]="currentProduct.categoryId">
+                <option value="">-Выбор категории-</option>
+
+                @for (category of categories; track category.id) 
+                {
+                    <option value="{{category.id}}">
+                        {{category.name}}
+                    </option>
+                }
+            </select>
+
+            <div class="update-buttons">
+                <button 
+                    class="main-button"
+                    (click)="updateProduct()"
+                >
+                    Сохранить изменения
+                </button>
+
+                <button 
+                    class="main-button"
+                    (click)="productUpdateIsV = false"
+                >
+                    Отмена
+                </button>
+            </div>
+        </section>
+    </div>
+}

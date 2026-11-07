@@ -32,14 +32,14 @@ namespace Infrastructure.DB.Repository
 
         public async Task<List<UserAction>> GetActionsByUserIdAsync(Guid userId)
         {
-            var entities = await _context.UserActions.AsNoTracking().Where(ua => ua.UserId == userId).OrderBy(ua => ua.ActionDateTime).ToListAsync();
+            var entities = await _context.UserActions.AsNoTracking().Where(ua => ua.UserId == userId).OrderByDescending(ua => ua.ActionDateTime).ToListAsync();
             var result = entities.Select(ua => new UserAction(ua.Id, ua.UserId, ua.Text, ua.ActionDateTime, ua.ActionType)).ToList();
             return result;
         }
 
         public async Task<List<UserAction>> GetAllActionsAsync()
         {
-            var entities = await _context.UserActions.AsNoTracking().OrderBy(ua => ua.ActionDateTime).ToListAsync();
+            var entities = await _context.UserActions.AsNoTracking().OrderByDescending(ua => ua.ActionDateTime).ToListAsync();
             var result = entities.Select(ua => new UserAction(ua.Id, ua.UserId, ua.Text, ua.ActionDateTime, ua.ActionType)).ToList();
             return result;
         }

@@ -52,7 +52,7 @@ namespace ProductCatalog.API.Contracts.ProductContract
                     request.Price,
                     request.MainNote,
                     request.SubNote,
-                    request.CaregoryId
+                    request.CategoryId
                 );
 
             return result;

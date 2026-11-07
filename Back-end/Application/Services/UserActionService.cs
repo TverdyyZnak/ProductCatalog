@@ -1,4 +1,5 @@
 ﻿using Application.Commons;
+using Application.DTO.Convertors;
 using Application.DTO.UserActionDtos;
 using Application.Interfaces;
 
@@ -17,14 +18,16 @@ namespace Application.Services
             await _userActionRepository.CreateActionAsync(action);
         }
 
-        public Task<List<UserActionDto>> GetUserActionByIdAsync(Guid id)
+        public async Task<List<UserActionDto>> GetUserActionByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var actions = await _userActionRepository.GetActionsByUserIdAsync(id);
+            return UserActionsConvertor.ToDto(actions);
         }
 
-        public Task<List<UserActionDto>> GetUserActions()
+        public async Task<List<UserActionDto>> GetUserActions()
         {
-            throw new NotImplementedException();
+            var actions = await _userActionRepository.GetAllActionsAsync();
+            return UserActionsConvertor.ToDto(actions);
         }
     }
 }
